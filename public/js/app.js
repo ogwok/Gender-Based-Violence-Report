@@ -19,8 +19,13 @@ requestForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const addRequest = firebase.functions().httpsCallable("addRequest");
+  
   addRequest({
-    text: requestForm.request.value,
+    name: requestForm.fname.value,
+    age: requestForm.age.value,
+    location: requestForm.location.value,
+    gender: requestForm.gender.value,
+    report: requestForm.report.value,
   })
     .then(() => {
       requestForm.reset();

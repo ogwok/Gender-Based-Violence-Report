@@ -7,7 +7,6 @@ exports.newUserSignUp = functions.auth.user().onCreate((user) => {
   // for background triggers you must return a value/promise
   return admin.firestore().collection("users").doc(user.uid).set({
     email: user.email,
-    upvotedOn: [],
   });
 });
 
@@ -17,22 +16,25 @@ exports.userDeleted = functions.auth.user().onDelete((user) => {
   return doc.delete();
 });
 
-// http callable function (adding a request)
+// http callable function (adding a report)
 exports.addRequest = functions.https.onCall((data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
-      "unauthenticated",
-      "only authenticated users can add requests"
+        "unauthenticated",
+        "only authenticated users can add requests"
     );
   }
-  if (data.text.length > 30) {
+  if (data.report.length > 30) {
     throw new functions.https.HttpsError(
-      "invalid-argument",
-      "request must be no more than 30 characters long"
+        "invalid-argument",
+        "request must be no more than 30 characters long"
     );
   }
-  return admin.firestore().collection("requests").add({
-    text: data.text,
-    upvotes: 0,
+  return admin.firestore().collection("reports").add({
+    name: data.name,
+    age: data.age,
+    location: data.location,
+    gender: data.gender,
+    report: data.report,
   });
 });
